@@ -6,6 +6,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 
 import { Sequelize } from 'sequelize-typescript';
 import { TasksModule } from './tasks/tasks.module';
+import { ClassesModule } from './classes/classes.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { TasksModule } from './tasks/tasks.module';
     autoLoadModels: true, 
     synchronize: true, 
   }),
-  TasksModule
+  TasksModule,
+  ClassesModule
 ],
   controllers: [AppController],
   providers: [AppService],
