@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Delete, Put } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './tasks.dto';
 import { TaskExistsPipe } from './task-exist.pipe';
@@ -11,9 +11,8 @@ export class TasksController {
 
   @Post()
   async createTask(
-    @Body('wordIds', WordsExistsPipe) wordIds: number[],
-        @Body() createTaskDto: CreateTaskDto 
-   ) {
+        @Body( WordsExistsPipe) createTaskDto: CreateTaskDto ) 
+      {
     return this.tasksService.createTask(createTaskDto);
   }
 
@@ -21,6 +20,14 @@ export class TasksController {
   async getTask(@Param ('id', TaskExistsPipe) taskID: number) {
     return this.tasksService.getTask(taskID);
   }
+
+  @Put(':id')
+  async updateTask (
+    @Param ('id', TaskExistsPipe) taskID: number,
+    @Body(WordsExistsPipe) createTaskDto: CreateTaskDto )
+    {
+      return this.tasksService.updateTask (taskID, createTaskDto); 
+    }
 
   @Delete(':id')
   async deleteTask(@Param('id', TaskExistsPipe) taskID: number) {

@@ -18,13 +18,32 @@ export class TasksService {
 
     const task = await this.taskModel.create({ taskName });
 
+    if (wordIds){
     const words = await this.wordModel.findAll({
         where: { wordID: wordIds },
       });
 
       await task.$add('words', words);
-
+    }
     return task;
+  }
+
+  async updateTask(taskID, createTaskDto: CreateTaskDto){
+    const task = await this.findTaskById (taskID); 
+    
+    if (createTaskDto.taskName){
+      task.taskName = createTaskDto.taskName; 
+    }
+
+    if (createTaskDto.wordIds){
+    const words = await this.wordModel.findAll({
+      where: { wordID: createTaskDto.wordIds },
+    });
+
+    await task.$set('words', words);
+  }
+
+    await task.save();
   }
 
   async findTaskById (taskID: number){ 

@@ -1,7 +1,8 @@
-import { IsArray, IsInt, IsNotEmpty,ArrayNotEmpty } from 'class-validator';
+import { IsArray, IsInt, IsNotEmpty,ArrayNotEmpty, Matches } from 'class-validator';
 
 export class CreateTaskDto {
   @IsNotEmpty()
+  @Matches(/\S/, { message: 'taskName must not be empty or contain only whitespace' })
   taskName: string;
   @IsArray()
   @ArrayNotEmpty()
