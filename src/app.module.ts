@@ -7,6 +7,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { TasksModule } from './tasks/tasks.module';
 import { ClassesModule } from './classes/classes.module';
+import { PerformanceModule } from './performance/performance.module';
 
 @Module({
   imports: [
@@ -22,9 +23,10 @@ import { ClassesModule } from './classes/classes.module';
     synchronize: true, 
   }),
   TasksModule,
-  ClassesModule
+  ClassesModule,
+  PerformanceModule
 ],
-  controllers: [AppController],
+  controllers: [AppController, ],
   providers: [AppService],
 })
 
