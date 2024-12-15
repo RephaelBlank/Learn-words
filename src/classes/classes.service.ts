@@ -20,8 +20,14 @@ export class ClasseService {
     }
 
     async findStudentsByClass (classID: number){
-        return this.studentsModel.findAll({
-            where: { classID: classID },
-          });
-    }
+    const getClass = await this.classesModel.findOne({
+      where: { classID },
+      include: {
+        model: Students,
+        attributes: ['studentID', 'studentName'], 
+      },
+    });
+    return getClass; 
+  }
+
 }
