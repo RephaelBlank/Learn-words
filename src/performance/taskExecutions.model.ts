@@ -17,8 +17,12 @@ export class TasksExecutions extends Model {
   @Column ({type: DataType.INTEGER})
   studentID: number; 
 
-  @Column ({type: DataType.STRING, defaultValue: 'pending'})
-  status: string; 
+  @Column({
+    type: DataType.ENUM('PENDING', 'COMPLETED', 'CANCELED'),
+    allowNull: false,
+    defaultValue: 'PENDING',
+  })
+  status: 'PENDING' | 'COMPLETED' | 'CANCELED';
 
   @Column ({type: DataType.FLOAT})
   score: number; 

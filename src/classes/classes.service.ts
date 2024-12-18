@@ -20,14 +20,21 @@ export class ClasseService {
     }
 
     async findStudentsByClass (classID: number){
-    const getClass = await this.classesModel.findOne({
-      where: { classID },
-      include: {
-        model: Students,
-        attributes: ['studentID', 'studentName'], 
-      },
-    });
-    return getClass; 
-  }
+      const getClass = await this.classesModel.findOne({
+        where: { classID },
+        include: {
+          model: Students,
+          attributes: ['studentID', 'studentName'], 
+        },
+      });
+      return getClass; 
+    }
+
+    async findClassById (classID: number){ 
+      const classTo = await this.classesModel.findOne ({
+        where: {classID}
+      });
+      return classTo;
+    }
 
 }

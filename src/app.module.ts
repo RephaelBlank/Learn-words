@@ -34,6 +34,6 @@ export class AppModule {
   constructor(private sequelize: Sequelize) {}
 
   async onModuleInit() {
-    await this.sequelize.sync(); 
+    await this.sequelize.sync({ alter: true }); 
   }
 }
