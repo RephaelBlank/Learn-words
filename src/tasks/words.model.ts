@@ -12,8 +12,11 @@ export class Words extends Model {
   @Column({ type: DataType.STRING, allowNull: false })
   wordName: string;
 
-  @Column({ type: DataType.STRING, allowNull: false })
+  @Column({ type: DataType.STRING, allowNull: true })
   definition: string;
+
+  @Column({ type: DataType.INTEGER, allowNull: true })
+  definitionID: number;
 
   @BelongsToMany(() => Tasks, () => TaskWord)
   tasks: Tasks[];
