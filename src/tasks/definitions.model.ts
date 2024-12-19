@@ -1,4 +1,4 @@
-import { Column, DataType, Model, Table, ForeignKey, AutoIncrement, PrimaryKey } from 'sequelize-typescript';
+import { Column, DataType, Model, Table, ForeignKey,BelongsTo, AutoIncrement, PrimaryKey } from 'sequelize-typescript';
 import { Words } from './words.model';
 
 @Table({ tableName: 'definitions', timestamps: false })
@@ -14,4 +14,7 @@ export class Definitions extends Model {
   @ForeignKey(() => Words)
   @Column({ type: DataType.INTEGER, allowNull: false })
   wordID: number;
+
+  @BelongsTo(() => Words)
+  word: Words;
 }
