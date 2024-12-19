@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException  } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit  } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Tasks } from './tasks.model';
 import { Words } from './words.model';
@@ -6,12 +6,16 @@ import { TaskWord } from './task-word.model';
 import { CreateTaskDto } from './tasks.dto';
 
 @Injectable()
-export class TasksService {
+export class TasksService implements OnModuleInit {
   constructor(
     @InjectModel(Tasks) private readonly taskModel: typeof Tasks,
     @InjectModel(Words) private readonly wordModel: typeof Words,
     @InjectModel(TaskWord) private readonly taskWordModel: typeof TaskWord
   ) {}
+
+  async onModuleInit() {
+    Words.initializeHooks();
+  }
 
   async createTask(createTaskDto: CreateTaskDto) {
     const { taskName, wordIds } = createTaskDto;
