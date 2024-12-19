@@ -8,6 +8,7 @@ import { Students } from 'src/classes/students.model';
 import { AssignTaskDto } from './assignTask.dto';
 import { TasksService } from 'src/tasks/tasks.service';
 import { ClasseService } from 'src/classes/classes.service';
+import { Definitions } from 'src/tasks/definitions.model';
 
 @Injectable()
 export class PerformanceService {
@@ -107,18 +108,44 @@ export class PerformanceService {
                 include: [
                   {
                     model: Tasks,
-                    include: [Words], 
+                    include: [
+                        {
+                            model: Words,
+                            include: [{
+                                model: Definitions,
+                                required: false,
+                                }
+                            ],
+                        },
+                    ], 
                   },
                 ],
               },
             ],
           });
       
-          if (!taskExecution) {
+        if (!taskExecution) {
             throw new NotFoundException('Task execution not found');
-          }
-      
-          return taskExecution;
+        }
+
+        const words = taskExecution.assignedTask.tasks.words.map(word => ({
+              id: word.wordID,
+              content: word.wordName,
+            }));
+        
+        const definitions =  taskExecution.assignedTask.tasks.words.map(word => ({
+              id: word.definition.definitionID,
+              content: word.definition.definition,
+            }));
+        
+        const shuffledWords = words.sort(() => Math.random() - 0.5);
+        const shuffledDefinitions = definitions.sort(() => Math.random() - 0.5);
+        
+          return {
+            words: shuffledWords,
+            definitions: shuffledDefinitions,
+          };
+
         }
 
     async executionTask (executionID: number, answers: JSON){
