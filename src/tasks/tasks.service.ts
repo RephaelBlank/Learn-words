@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException  } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Tasks } from '../src/tasks/tasks.model';
-import { Words } from '../src/tasks/words.model';
-import { TaskWord } from '../src/tasks/task-word.model';
-import { CreateTaskDto } from '../src/tasks/tasks.dto';
+import { Tasks } from './tasks.model';
+import { Words } from './words.model';
+import { TaskWord } from './task-word.model';
+import { CreateTaskDto } from './tasks.dto';
 
 @Injectable()
 export class TasksService {

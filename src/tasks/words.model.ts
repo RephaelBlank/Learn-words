@@ -18,4 +18,15 @@ export class Words extends Model {
 
   @BelongsToMany(() => Tasks, () => TaskWord)
   tasks: Tasks[];
+
+  static async afterCreateHook(instance: Words): Promise<void> {
+    await Definitions.create({
+      wordID: instance.wordID,
+      definition: '', 
+    });
+  }
+
+  static initializeHooks() {
+    this.addHook('afterCreate', Words.afterCreateHook);
+  }
 }

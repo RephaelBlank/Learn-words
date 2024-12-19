@@ -6,7 +6,7 @@ import { Tasks } from 'src/tasks/tasks.model';
 import { Words } from 'src/tasks/words.model';
 import { Students } from 'src/classes/students.model';
 import { AssignTaskDto } from './assignTask.dto';
-import { TasksService } from 'test/tasks.service';
+import { TasksService } from 'src/tasks/tasks.service';
 import { ClasseService } from 'src/classes/classes.service';
 
 @Injectable()

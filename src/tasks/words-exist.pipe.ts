@@ -1,5 +1,5 @@
 import {PipeTransform, Injectable, NotFoundException  } from '@nestjs/common';
-import { TasksService } from '../../test/tasks.service';
+import { TasksService } from './tasks.service';
 
 @Injectable()
 export class WordsExistsPipe implements PipeTransform{
