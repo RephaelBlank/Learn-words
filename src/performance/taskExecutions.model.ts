@@ -28,11 +28,12 @@ export class TasksExecutions extends Model {
   score: number; 
 
   @Column ({type: DataType.JSONB})
-  answers: JSON; 
+  results: { wordID: number; definitionID: number; isValid: boolean }[];
 
   @BelongsTo (() => AssignedTasks)
   assignedTask: AssignedTasks; 
 
   @BelongsTo(() => Students)
   student: Students;
+  taskExecution: { isValid: boolean; wordID: number; definitionID: number; }[];
 }

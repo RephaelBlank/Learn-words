@@ -164,30 +164,41 @@ export class PerformanceService {
             map[word.wordID] = word.definition.definitionID;
             return map;
             }, {} as Record<number, number>);
-          
+        
+        let correctAnswers = 0; 
+
         const results = pairs.map(pair => {
             const isValid = validationMap[pair.wordID] === pair.definitionID;
+            if (isValid) {
+              correctAnswers++;
+            }
             return {
                 ...pair,
                 isValid,
               };
             });
-          
-        return results;
+
+        const totalPairs = pairs.length;
+        const score = totalPairs > 0 ? (correctAnswers / totalPairs) * 100 : 0;
+            
+        return {results, score};
     }
 
     async executionTask (executionID: number, answers){
         const taskExecution = await this.tasksExecutionsModel.findOne({
-            where: { executionID }}); 
-        //taskExecution.answers = answers; 
+            where: { executionID }});
+            
+            if (!taskExecution) {
+              throw new NotFoundException('Task execution not found');
+          }
+
         taskExecution.status = 'COMPLETED';
 
-        //const pairs = JSON.parse(answers); 
-        const result = await this.verifyWordDefinitionPairs (executionID,answers); 
+        const {results, score} = await this.verifyWordDefinitionPairs (executionID,answers); 
 
-        console.log(result); 
-
-        taskExecution.score = 60; 
+        console.log(results); 
+        taskExecution.results = results; 
+        taskExecution.score = score; 
 
         await taskExecution.save(); 
 
