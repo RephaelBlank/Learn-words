@@ -99,6 +99,17 @@ export class PerformanceService {
         return tasksExecutions; 
     }
 
+    async getTaskExecutionById (executionID: number){
+      const taskExecution = await this.findTaskExecutionById(executionID);
+      
+      return {
+        executionID: taskExecution.executionID,
+        results: taskExecution.results,
+        score: taskExecution.score,
+        status: taskExecution.status,
+    };
+    }
+
     async findTaskExecutionById (executionID: number){
         const taskExecution = await this.tasksExecutionsModel.findOne({
             where: { executionID },
