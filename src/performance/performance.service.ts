@@ -50,27 +50,28 @@ export class PerformanceService {
     }
      
 
-    async findTaskByStudent (studentID: number) {
-        const taskExecution = await this.tasksExecutionsModel.findAll({
+    async findTasksByStudent (studentID: number) {
+        const tasksExecutions = await this.tasksExecutionsModel.findAll({
             where: { studentID },
             include: [
               {
                 model: AssignedTasks,
-                include: [
-                  {
-                    model: Tasks,
-                    include: [Words], 
-                  },
-                ],
+                include: [Tasks],
               },
             ],
             });
 
-        if (!taskExecution) {
+        if (!tasksExecutions) {
             throw new NotFoundException(`No task found for student ID ${studentID}`);
         }
-      
-        return taskExecution;
+
+        return tasksExecutions.map(taskExecution => ({
+          executionID: taskExecution.executionID,
+          taskName: taskExecution.assignedTask.tasks.taskName,
+          results: taskExecution.results,
+          score: taskExecution.score,
+          status: taskExecution.status,
+      }));
     }
 
     async assignTaskToAllStudents (taskID: number){

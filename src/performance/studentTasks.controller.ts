@@ -7,7 +7,7 @@ export class StudentTasksController {
 
   @Get('student/:studentID')
   async getTasksbystudent(@Param ('studentID') studentID: number) {
-    return this.performanceService.findTaskByStudent(studentID); 
+    return this.performanceService.findTasksByStudent(studentID); 
   }
 
   @Get(':executionID')
