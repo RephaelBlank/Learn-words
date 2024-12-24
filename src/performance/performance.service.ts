@@ -24,8 +24,6 @@ export class PerformanceService {
     async fetchDefinitionFromAPI(word: string): Promise<string> {
       try {
         const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-        console.log (response);
-
         const definition = response.data[0]?.meanings[0]?.definitions[0]?.definition;
        
         return definition || 'No definition available';; 
