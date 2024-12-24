@@ -12,7 +12,7 @@ export class StudentTasksController {
 
   @Get(':executionID')
   async getTaskExecutionById(@Param('executionID') executionID: number) {
-    return await this.performanceService.getTaskExecutionById(executionID);
+    return await this.performanceService.getTaskToExecution(executionID);
   }
 
   @Put(':executionID') 

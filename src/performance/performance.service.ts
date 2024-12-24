@@ -10,6 +10,8 @@ import { TasksService } from 'src/tasks/tasks.service';
 import { ClasseService } from 'src/classes/classes.service';
 import { Definitions } from 'src/tasks/definitions.model';
 
+import axios from 'axios'; 
+
 @Injectable()
 export class PerformanceService {
     constructor(
@@ -18,6 +20,20 @@ export class PerformanceService {
         private readonly tasksService: TasksService,
         private readonly classesService: ClasseService
     ){}
+
+    async fetchDefinitionFromAPI(word: string): Promise<string> {
+      try {
+        const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+        console.log (response);
+
+        const definition = response.data[0]?.meanings[0]?.definitions[0]?.definition;
+       
+        return definition || 'No definition available';; 
+      } catch (error) {
+          console.error(`Failed to fetch definition for word "${word}":`, error.message);
+          return 'Definition not found'; 
+      }
+  }
 
     async assignTaskByClass (assignTaskDto: AssignTaskDto){
         const {classID, taskID} = assignTaskDto; 
@@ -100,16 +116,6 @@ export class PerformanceService {
         return tasksExecutions; 
     }
 
-    async getTaskExecutionById (executionID: number){
-      const taskExecution = await this.findTaskExecutionById(executionID);
-      
-      return {
-        executionID: taskExecution.executionID,
-        results: taskExecution.results,
-        score: taskExecution.score,
-        status: taskExecution.status,
-    };
-    }
 
     async findTaskExecutionById (executionID: number){
         const taskExecution = await this.tasksExecutionsModel.findOne({
@@ -151,10 +157,16 @@ export class PerformanceService {
         content: word.wordName,
       }));
   
-      const definitions =  taskExecution.assignedTask.tasks.words.map(word => ({
-        id: word.definition.definitionID,
-        content: word.definition.definition,
-      }));
+      const definitions = await Promise.all(
+        taskExecution.assignedTask.tasks.words.map(async word => {
+          const definition = word.definition.definition || await this.fetchDefinitionFromAPI(word.wordName);
+          return {
+            id: word.definition.definitionID,
+            content: definition
+          };
+        })
+      );
+      
 
       const shuffledWords = words.sort(() => Math.random() - 0.5);
       const shuffledDefinitions = definitions.sort(() => Math.random() - 0.5);
