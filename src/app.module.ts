@@ -8,6 +8,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { TasksModule } from './tasks/tasks.module';
 import { ClassesModule } from './classes/classes.module';
 import { PerformanceModule } from './performance/performance.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { PerformanceModule } from './performance/performance.module';
   }),
   TasksModule,
   ClassesModule,
-  PerformanceModule
+  PerformanceModule,
+  AuthModule
 ],
   controllers: [AppController, ],
   providers: [AppService],
