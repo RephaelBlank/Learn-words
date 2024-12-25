@@ -11,6 +11,9 @@ export class Teachers extends Model {
   @Column({ type: DataType.STRING, allowNull: false })
   teacherName: string;
 
+  @Column({ type: DataType.STRING, allowNull: false })
+  password: string;
+
   @HasMany (()=> Classes)
   classes: Classes[];
 }
