@@ -18,7 +18,7 @@ import { AuthModule } from './auth/auth.module';
     port: 5432, 
     username: 'postgres', 
     password: 'mysecretpassword', 
-    database: 'learn_word_db', 
+    database: 'db_for_test_auth', 
     models: [], 
     autoLoadModels: true, 
     synchronize: true, 
