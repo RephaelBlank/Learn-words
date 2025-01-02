@@ -7,4 +7,7 @@ export class AssignTaskDto {
 
   @IsInt()
   taskID: number;
+
+  @IsInt()
+  teacherID: number;
 }
