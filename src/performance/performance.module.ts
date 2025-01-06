@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { TasksExecutions } from './taskExecutions.model';
 import { AssignedTasks } from './assignedTasks.model';
@@ -10,7 +10,11 @@ import { ClassesModule } from 'src/classes/classes.module';
 import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-    imports: [SequelizeModule.forFeature([TasksExecutions, AssignedTasks]),TasksModule, ClassesModule, AuthModule],
+    imports: [SequelizeModule.forFeature([TasksExecutions, AssignedTasks]),
+      TasksModule,
+      forwardRef(()=>ClassesModule),
+      forwardRef(()=>AuthModule)
+    ],
     controllers: [TeacherTasksController, StudentTasksController ],
     providers: [PerformanceService], 
     exports: [PerformanceService]

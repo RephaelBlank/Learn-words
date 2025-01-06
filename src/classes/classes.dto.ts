@@ -10,11 +10,20 @@ export class CreateClassDto {
   @ArrayNotEmpty()
   @IsString ({each: true})
   studentsNames: string[];
+
+  @IsNotEmpty()
+  resourceType: string;
 }
 
 export class AddStudentsDto {
-    @IsArray()
-    @ArrayNotEmpty()
-    @IsString ({each: true})
-    studentsNames: string[];
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString ({each: true})
+  studentsNames: string[];
+
+  @IsInt ()
+  classID: number; 
+
+  @IsNotEmpty()
+  resourceType: string;
 }

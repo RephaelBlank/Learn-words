@@ -8,7 +8,7 @@ import { PerformanceModule } from 'src/performance/performance.module';
 
 
 @Module({
-  imports: [forwardRef(()=>PerformanceModule) , ClassesModule,
+  imports: [forwardRef(()=>ClassesModule),forwardRef(()=>PerformanceModule),
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,

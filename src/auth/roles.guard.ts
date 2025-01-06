@@ -46,6 +46,8 @@ import { AuthService } from './auth.service';
                 return request.body?.classID || 0; 
             case 'assignedTask':
                 return request.body?.taskID || 0; 
+            case 'teacher': 
+                return request.body?.teacherID || 0; 
             default:
                 return 0;
         } 

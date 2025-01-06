@@ -29,6 +29,8 @@ export class AuthService {
         return this.validateClassAccess(userId, resourceId);
       case 'assignedTask':
         return this.validateAssignmentAccess(userId, resourceId);
+      case 'teacher': 
+        return userId === resourceId; 
       default:
         return false;
     }
