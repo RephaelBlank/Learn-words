@@ -5,12 +5,13 @@ import { AssignedTasks } from './assignedTasks.model';
 import { Tasks } from 'src/tasks/tasks.model';
 import { Words } from 'src/tasks/words.model';
 import { Students } from 'src/classes/students.model';
-import { AssignTaskDto } from './assignTask.dto';
+import { AssignTaskDto, SendTaskDto } from './assignTask.dto';
 import { TasksService } from 'src/tasks/tasks.service';
 import { ClasseService } from 'src/classes/classes.service';
 import { Definitions } from 'src/tasks/definitions.model';
 
 import axios from 'axios'; 
+import { Classes } from 'src/classes/classes.model';
 
 @Injectable()
 export class PerformanceService {
@@ -62,6 +63,23 @@ export class PerformanceService {
         } 
 
     }
+
+    async findAssignedTask (assignedID: number){
+      const assignedTask = await this.assignedTasksModel.findOne ({
+        where: {assignedID: assignedID}, include: [
+          {
+            model: Classes, 
+            
+          }
+        ]
+      })
+
+      if (!assignedTask) {
+        throw new NotFoundException(`No task found for assignedTask ID ${assignedID}`);
+      }
+      console.log(assignedTask);
+      return assignedTask; 
+    }
      
 
     async findTasksByStudent (studentID: number) {
@@ -88,7 +106,8 @@ export class PerformanceService {
       }));
     }
 
-    async assignTaskToAllStudents (taskID: number){
+    async assignTaskToAllStudents (sendTaskDto: SendTaskDto){
+        const taskID = sendTaskDto.taskID; 
         const assignedTask = await AssignedTasks.findOne({
             where:
              { assignedID: taskID },

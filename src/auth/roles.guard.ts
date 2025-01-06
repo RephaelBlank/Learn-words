@@ -4,9 +4,12 @@ import {
     Injectable,
     ForbiddenException,
   } from '@nestjs/common';
+import { AuthService } from './auth.service';
   
   @Injectable()
   export class RolesGuard implements CanActivate {
+    constructor (private readonly authService: AuthService){} 
+
     async canActivate(context: ExecutionContext): Promise<boolean> {
       const request = context.switchToHttp().getRequest();
       const user = request['user']; 
@@ -15,19 +18,37 @@ import {
       if (!user || !user.sub) {
         throw new ForbiddenException('Access denied');
       }
-  
-      const resourceOwnerId = this.extractResourceOwnerId(request);
+      
+      const resourceType = this.extractResourceType(request);
+      const resourceOwnerId = this.extractResourceId(request, resourceType);
+
       console.log(resourceOwnerId);
-      if (user.sub !== resourceOwnerId) {
+      const isAuthorized = await this.authService.validateAccessTeacher(
+        user.sub,
+        resourceType,
+        resourceOwnerId
+      );
+  
+      if (!isAuthorized) {
         throw new ForbiddenException('You do not have access to this resource');
       }
-  
+      
       return true;
     }
+
+    private extractResourceType (request: any): string{
+        return request.body?.resourceType || ''; 
+    }
   
-    private extractResourceOwnerId(request: any): string {
-        console.log (request); 
-        return request.body?.teacherID || ''; 
+    private extractResourceId(request: any, resourceType: string): number {
+        switch (resourceType){
+            case 'class':
+                return request.body?.classID || 0; 
+            case 'assignedTask':
+                return request.body?.taskID || 0; 
+            default:
+                return 0;
+        } 
     }
   }
   
