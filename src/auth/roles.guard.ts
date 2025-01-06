@@ -14,6 +14,10 @@ import { AuthService } from './auth.service';
       const request = context.switchToHttp().getRequest();
       const user = request['user']; 
       console.log (user); 
+
+      if (user && user.role === 'admin'){
+        return true; 
+      }
   
       if (!user || !user.sub) {
         throw new ForbiddenException('Access denied');

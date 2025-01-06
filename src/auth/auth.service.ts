@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClasseService } from 'src/classes/classes.service';
 import { JwtService } from '@nestjs/jwt';
 import { PerformanceService } from 'src/performance/performance.service';
+import { jwtConstants } from './constants';
 
 
 @Injectable()
@@ -15,9 +16,19 @@ export class AuthService {
   async signIn(teacherID: number, pass: string): Promise<any> {
     const user = await this.classesService.findTeacherById(teacherID);
     if (user?.password !== pass) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("Password incorrect");
     }
     const payload = { sub: user.teacherID, username: user.teacherName };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
+  }
+
+  async signInAdmin (password: string): Promise <any> {
+    if (jwtConstants.password !== password) {
+      throw new UnauthorizedException("Password of admin incorrect");
+    }
+    const payload = { role: 'admin', password};
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
