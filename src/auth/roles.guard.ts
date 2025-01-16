@@ -41,13 +41,13 @@ import { AuthService } from './auth.service';
     }
 
     private extractResourceType (request: any): string{
-        return request.body?.resourceType || ''; 
+        return request.body?.resourceType || 'class'; 
     }
   
     private extractResourceId(request: any, resourceType: string): number {
         switch (resourceType){
             case 'class':
-                return request.body?.classID || 0; 
+                return request.params?.id || 0; 
             case 'assignedTask':
                 return request.body?.taskID || 0; 
             case 'teacher': 

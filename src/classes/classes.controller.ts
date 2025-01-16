@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Put, UseGuards, Request } from '@nestjs/common';
 import { ClasseService } from './classes.service';
 import { AddStudentsDto, CreateClassDto } from './classes.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -12,6 +12,12 @@ export class ClassesController {
   @Get(':id')
     async getStudents(@Param ('id') classID: number) {
     return this.classesService.findStudentsByClass (classID); 
+  }
+
+  @UseGuards (AuthGuard)
+  @Get()
+    async getClasses(@Request () req) {
+    return this.classesService.findClassesByTeacher (req.user.sub); 
   }
 
   @UseGuards (AuthGuard, RolesGuard)
