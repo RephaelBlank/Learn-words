@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Delete, Put, Query } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './tasks.dto';
 import { TaskExistsPipe } from './task-exist.pipe';
@@ -8,6 +8,11 @@ import { WordsExistsPipe } from './words-exist.pipe';
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
+
+  @Get()
+  async getWordsByPrefix(@Query('prefix') prefix: string) {
+    return this.tasksService.findWordsByPrefix(prefix);
+  }
 
   @Post()
   async createTask(

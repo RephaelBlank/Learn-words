@@ -4,6 +4,7 @@ import { Tasks } from './tasks.model';
 import { Words } from './words.model';
 import { TaskWord } from './task-word.model';
 import { CreateTaskDto } from './tasks.dto';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class TasksService implements OnModuleInit {
@@ -80,5 +81,20 @@ export class TasksService implements OnModuleInit {
 
   async deleteTask (taskID: number){
     return await this.taskModel.destroy({where: { taskID: taskID }})
+  }
+
+  async findWordsByPrefix(prefix: string) {
+    if (!prefix) {
+      return [];
+    }
+
+    return this.wordModel.findAll({
+      where: {
+        wordName: {
+          [Op.startsWith]: prefix,
+        },
+      },
+      limit: 100,
+    });
   }
 }
