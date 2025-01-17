@@ -1,6 +1,7 @@
 import { Column, DataType, Model, Table, ForeignKey, AutoIncrement, PrimaryKey, HasMany } from 'sequelize-typescript';
 import { Teachers } from './teachers.model';
 import { Students } from './students.model'; 
+import { AssignedTasks } from 'src/performance/assignedTasks.model';
 
 @Table({ tableName: 'classes', timestamps: false,
     indexes: [
@@ -25,4 +26,7 @@ export class Classes extends Model {
 
   @HasMany (()=> Students)
   students: Students[];
+
+  @HasMany (() => AssignedTasks)
+  assignedTasks: AssignedTasks[];
 }

@@ -4,6 +4,8 @@ import { Teachers } from './teachers.model';
 import { Students } from './students.model';
 import { Classes } from './classes.model';
 import { AddStudentsDto, CreateClassDto } from './classes.dto';
+import { AssignedTasks } from 'src/performance/assignedTasks.model';
+import { Tasks } from 'src/tasks/tasks.model';
 
 
 @Injectable()
@@ -23,10 +25,16 @@ export class ClasseService {
     async findStudentsByClass (classID: number){
       const getClass = await this.classesModel.findOne({
         where: { classID },
-        include: {
+        include: [{
           model: Students,
           attributes: ['studentID', 'studentName'], 
         },
+        {
+          model: AssignedTasks, 
+          attributes: ['taskID'],
+          include: [Tasks]
+        },
+      ],
       });
       return getClass; 
     }
