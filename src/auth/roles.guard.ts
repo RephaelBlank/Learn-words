@@ -14,6 +14,7 @@ import { AuthService } from './auth.service';
       const request = context.switchToHttp().getRequest();
       const user = request['user']; 
       console.log (user); 
+      console.log (request.body);
 
       if (user && user.role === 'admin'){
         return true; 
@@ -47,7 +48,7 @@ import { AuthService } from './auth.service';
     private extractResourceId(request: any, resourceType: string): number {
         switch (resourceType){
             case 'class':
-                return request.params?.id || 0; 
+                return request.params?.id ||request.body?.classID|| 0; 
             case 'assignedTask':
                 return request.body?.taskID || 0; 
             case 'teacher': 
