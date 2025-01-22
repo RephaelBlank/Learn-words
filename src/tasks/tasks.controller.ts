@@ -10,6 +10,11 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get()
+  async getTaskNames (){
+    return await this.tasksService.getTaskNames(); 
+  }
+  
+  @Get('words')
   async getWordsByPrefix(@Query('prefix') prefix: string) {
     return this.tasksService.findWordsByPrefix(prefix);
   }

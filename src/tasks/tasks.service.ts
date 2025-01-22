@@ -65,7 +65,11 @@ export class TasksService implements OnModuleInit {
       },
     });
   }
-  
+
+  async getTaskNames() {
+    const tasks = await this.taskModel.findAll();
+    return tasks;
+  }
 
   async getTask(taskID: number) {
     const task = await this.taskModel.findOne({
