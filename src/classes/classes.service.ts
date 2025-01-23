@@ -31,7 +31,7 @@ export class ClasseService {
         },
         {
           model: AssignedTasks, 
-          attributes: ['taskID'],
+          attributes: ['taskID','assignedID'],
           include: [Tasks]
         },
       ],
