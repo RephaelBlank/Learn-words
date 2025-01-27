@@ -13,6 +13,12 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Post('sign-up')
+  signUp(@Body() signUpDto: Record<string, any>) {
+    return this.authService.signUp(signUpDto.teacherName, signUpDto.password);
+  }
+
+  @HttpCode(HttpStatus.OK)
   @Post('admin')
   signInAdmin(@Body() signInDto: Record<string, any>) {
     return this.authService.signInAdmin(signInDto.password);

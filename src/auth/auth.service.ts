@@ -24,6 +24,17 @@ export class AuthService {
     };
   }
 
+  async signUp (teacherName: string, pass: string): Promise<any> {
+    const teacher = await this.classesService.newTeacher(teacherName,pass); 
+    if (teacher){
+      const payload = { sub: teacher.teacherID, username: teacher.teacherName };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+      teacherID: teacher.teacherID
+    };
+    }
+  }
+
   async signInAdmin (password: string): Promise <any> {
     if (jwtConstants.password !== password) {
       throw new UnauthorizedException("Password of admin incorrect");

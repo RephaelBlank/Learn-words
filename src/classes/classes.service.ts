@@ -89,4 +89,9 @@ export class ClasseService {
       await targetClass.$add('students', students); 
     }
 
+    async newTeacher (teacherName: string, password: string) {
+      const teacher = await this.teachersModel.create({teacherName,password}); 
+      return teacher; 
+    }
+
 }
