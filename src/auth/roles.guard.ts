@@ -65,6 +65,9 @@ import { AuthService } from './auth.service';
         if (request.params?.executionID){
           return 'execution'; 
         }
+        if (request.params?.assignedID){
+          return 'assignedTask'; 
+        }
         return request.body?.resourceType || 'class'; 
     }
   
@@ -73,7 +76,7 @@ import { AuthService } from './auth.service';
             case 'class':
                 return request.params?.id ||request.body?.classID|| 0; 
             case 'assignedTask':
-                return request.body?.taskID || 0; 
+                return request.body?.taskID ||request.params?.assignedID || 0; 
             case 'teacher': 
                 return request.body?.teacherID || 0;
             case 'student':

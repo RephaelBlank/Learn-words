@@ -92,4 +92,9 @@ export class AuthService {
     const ID = await this.performanceService.findStudentByTaskExecution(executionID); 
     return ID === studentID;
   }
+
+  async getTokenToStudents (assignedID: number){
+    const token = this.jwtService.sign({ assignedID: assignedID }, {  expiresIn: '180d' });
+    return token; 
+  }
 }
