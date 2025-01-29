@@ -52,7 +52,7 @@ export class AuthService {
       case 'assignedTask':
         return this.validateAssignmentAccess(userId, resourceId);
       case 'teacher': 
-        return userId === resourceId; 
+        return Number(userId) === Number(resourceId); 
       default:
         return false;
     }
