@@ -70,7 +70,10 @@ export class PerformanceService {
         where: {assignedID: assignedID}, include: [
           {
             model: Classes, 
-            
+            include: [{
+              model: Students,
+              attributes: ['studentID', 'studentName'], 
+            }]
           }
         ]
       })
@@ -253,6 +256,14 @@ export class PerformanceService {
         return taskExecution.studentID; 
       }
       return 0; 
+    }
+
+    async findStudentsByAssignedTask (assignedID: number){
+      const assignedTask = await this.findAssignedTask(assignedID);
+      if (assignedTask){
+        return assignedTask.class.students; 
+      } 
+      return null; 
     }
       
     }
