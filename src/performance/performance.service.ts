@@ -30,6 +30,7 @@ export class PerformanceService {
         return definition || 'No definition available';; 
       } catch (error) {
           console.error(`Failed to fetch definition for word "${word}":`, error.message);
+          throw new Error(); 
           return 'Definition not found'; 
       }
   }
@@ -244,6 +245,14 @@ export class PerformanceService {
         await taskExecution.save(); 
 
         return taskExecution; 
+    }
+
+    async findStudentByTaskExecution (executionID: number){
+      const taskExecution = await this.tasksExecutionsModel.findOne({where:{ executionID}}); 
+      if (taskExecution){
+        return taskExecution.studentID; 
+      }
+      return 0; 
     }
       
     }

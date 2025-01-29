@@ -18,7 +18,7 @@ export class AuthService {
     if (user?.password !== pass) {
       throw new UnauthorizedException("Password incorrect");
     }
-    const payload = { sub: user.teacherID, username: user.teacherName };
+    const payload = {role:'teacher', sub: user.teacherID, username: user.teacherName };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
@@ -27,12 +27,23 @@ export class AuthService {
   async signUp (teacherName: string, pass: string): Promise<any> {
     const teacher = await this.classesService.newTeacher(teacherName,pass); 
     if (teacher){
-      const payload = { sub: teacher.teacherID, username: teacher.teacherName };
+      const payload = {role:'teacher', sub: teacher.teacherID, username: teacher.teacherName };
     return {
       access_token: await this.jwtService.signAsync(payload),
       teacherID: teacher.teacherID
     };
     }
+  }
+
+  async signInStudent (studentID: number, pass: string): Promise<any> {
+    const user = await this.classesService.findStudentById(studentID);
+    if (user?.password !== pass) {
+      throw new UnauthorizedException("Password incorrect");
+    }
+    const payload = {role:'student', sub: user.studentID, username: user.studentName };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 
   async signInAdmin (password: string): Promise <any> {
@@ -68,5 +79,17 @@ export class AuthService {
     return taskData?.class?.teacherID === userId; 
   }
 
+  async validateAccessStudent(studentID: number,resourceType: string, resourceId: number): Promise<boolean>{
+    switch (resourceType){
+      case 'execution':
+        return this.validateExecutionAccess (studentID, resourceId);
+      case 'student': 
+        return Number(studentID)===Number(resourceId);
+    } 
+  }
 
+  private async validateExecutionAccess (studentID: number, executionID: number): Promise<boolean> {
+    const ID = await this.performanceService.findStudentByTaskExecution(executionID); 
+    return ID === studentID;
+  }
 }

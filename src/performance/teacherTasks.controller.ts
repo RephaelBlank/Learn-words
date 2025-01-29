@@ -12,7 +12,6 @@ export class TeacherTasksController {
   @UseGuards(AuthGuard, RolesGuard)
   @Post('assign')
   async assignNewTask(@Body () assignTaskDto: AssignTaskDto)    {
-    console.log ("Connection sucsses!!!!!!");
     return this.performanceService.assignTaskByClass(assignTaskDto);
   }
  

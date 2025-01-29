@@ -28,6 +28,8 @@ import { AuthService } from './auth.service';
       const resourceOwnerId = this.extractResourceId(request, resourceType);
 
       console.log(resourceOwnerId);
+
+      if (user && user.role === 'teacher'){
       const isAuthorized = await this.authService.validateAccessTeacher(
         user.sub,
         resourceType,
@@ -39,9 +41,30 @@ import { AuthService } from './auth.service';
       }
       
       return true;
+      }
+
+      //user is student
+      const isAuthorized = await this.authService.validateAccessStudent(
+        user.sub,
+        resourceType,
+        resourceOwnerId
+      );
+
+      if (!isAuthorized) {
+        throw new ForbiddenException('You do not have access to this resource');
+      }
+      
+      return true;
+
     }
 
     private extractResourceType (request: any): string{
+        if (request.params?.studentID){
+          return 'student'; 
+        }
+        if (request.params?.executionID){
+          return 'execution'; 
+        }
         return request.body?.resourceType || 'class'; 
     }
   
@@ -52,7 +75,11 @@ import { AuthService } from './auth.service';
             case 'assignedTask':
                 return request.body?.taskID || 0; 
             case 'teacher': 
-                return request.body?.teacherID || 0; 
+                return request.body?.teacherID || 0;
+            case 'student':
+                return request.params?.studentID || 0;
+            case 'execution':
+                return request.params?.executionID || 0; 
             default:
                 return 0;
         } 

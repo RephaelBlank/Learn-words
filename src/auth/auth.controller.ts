@@ -19,6 +19,12 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Post('students-login')
+  signInStudent(@Body() signInDto: Record<string, any>) {
+    return this.authService.signInStudent(signInDto.studentID, signInDto.password);
+  }
+
+  @HttpCode(HttpStatus.OK)
   @Post('admin')
   signInAdmin(@Body() signInDto: Record<string, any>) {
     return this.authService.signInAdmin(signInDto.password);

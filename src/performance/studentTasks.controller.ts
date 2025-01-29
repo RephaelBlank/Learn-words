@@ -1,7 +1,10 @@
-import { Body, Controller , Get, Param, Post, Put} from '@nestjs/common';
+import { Body, Controller , Get, Param, Post, Put, UseGuards} from '@nestjs/common';
 import { PerformanceService } from './performance.service';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @Controller('performance')
+@UseGuards(AuthGuard, RolesGuard)
 export class StudentTasksController {
   constructor(private readonly performanceService: PerformanceService) {}
 
