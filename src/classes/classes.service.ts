@@ -83,7 +83,7 @@ export class ClasseService {
 
     async addStudentsToClass (targetClass, studentsNames: string[]){
         const students = await this.studentsModel.bulkCreate(
-        studentsNames.map((studentName) => ({ studentName }))
+        studentsNames.map((studentName) => ({ studentName: studentName, password: studentName + "123" }))
       );
 
       await targetClass.$add('students', students); 

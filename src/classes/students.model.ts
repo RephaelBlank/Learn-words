@@ -11,6 +11,9 @@ export class Students extends Model {
   @Column({ type: DataType.STRING, allowNull: false })
   studentName: string;
 
+  @Column({ type: DataType.STRING, allowNull: false })
+  password: string;
+
   @ForeignKey(() => Classes)
   @Column ({type: DataType.INTEGER})
   classID: number; 
