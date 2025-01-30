@@ -94,7 +94,7 @@ export class AuthService {
   }
 
   async getTokenToStudents (assignedID: number){
-    const token = this.jwtService.sign({ assignedID: assignedID }, {  expiresIn: '180d' });
+    const token = this.jwtService.sign({ assignedID: assignedID }, {secret: jwtConstants.secret,  expiresIn: '180d' });
     return token; 
   }
 }

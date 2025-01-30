@@ -81,7 +81,6 @@ export class PerformanceService {
       if (!assignedTask) {
         throw new NotFoundException(`No task found for assignedTask ID ${assignedID}`);
       }
-      console.log(assignedTask);
       return assignedTask; 
     }
      
