@@ -264,6 +264,14 @@ export class PerformanceService {
       } 
       return null; 
     }
+
+    async isTaskSended (assignedID: number){
+      const taskSend = await this.tasksExecutionsModel.findOne({where: {assignedID: assignedID}}); 
+      if (taskSend){
+        return true; 
+      }
+      return false; 
+    }
       
     }
 

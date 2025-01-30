@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ClasseService } from 'src/classes/classes.service';
 import { JwtService } from '@nestjs/jwt';
 import { PerformanceService } from 'src/performance/performance.service';
@@ -94,6 +94,10 @@ export class AuthService {
   }
 
   async getTokenToStudents (assignedID: number){
+    const taskSended = await this.performanceService.isTaskSended(assignedID); 
+    if (!taskSended){
+      throw new NotFoundException ("Task not sended."); 
+    }
     const token = this.jwtService.sign({ assignedID: assignedID }, {secret: jwtConstants.secret,  expiresIn: '180d' });
     return token; 
   }
