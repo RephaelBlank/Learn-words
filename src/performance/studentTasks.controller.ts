@@ -35,7 +35,8 @@ export class StudentTasksController {
   @Get('list/students')
   async getStudentsList(@Request() req) {
     const taskId = req['taskId'];
-    return this.performanceService.findStudentsByAssignedTask(taskId);
+    const students = await this.performanceService.findStudentsByAssignedTask(taskId);
+    return {taskID: taskId, students: students}; 
 }
   
 }
