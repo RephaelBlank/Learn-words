@@ -109,6 +109,27 @@ export class PerformanceService {
       }));
     }
 
+    async findTasksByStudentAndAssignedTask(studentId, taskId) {
+      try {
+        const performances = await this.tasksExecutionsModel.findAll({
+          where: {
+            studentID: studentId,
+            assignedID: taskId
+          }
+        });
+        //if there task not completed return execution ID, else return all tasks
+        for (const performance of performances){
+          if (performance.status === 'PENDING'){
+            return performance; 
+          }
+        }
+        return performances; 
+      } catch (error) {
+        console.error("Error fetching task performances:", error);
+        throw error;
+      }
+    }
+
     async assignTaskToAllStudents (sendTaskDto: SendTaskDto){
         const taskID = sendTaskDto.taskID; 
         const assignedTask = await AssignedTasks.findOne({

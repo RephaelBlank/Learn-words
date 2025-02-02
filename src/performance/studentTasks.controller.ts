@@ -14,6 +14,12 @@ export class StudentTasksController {
     return this.performanceService.findTasksByStudent(studentID); 
   }
 
+  @UseGuards(AuthGuard)
+  @Get('assignedTask/:assignedID')
+  async getTaskExecutionbystudentAndAssignedTask(@Param ('assignedID') assignedID: number, @Request () req) {
+    return this.performanceService.findTasksByStudentAndAssignedTask (req.user.sub, assignedID);  
+  }
+
   @UseGuards(AuthGuard, RolesGuard)
   @Get(':executionID')
   async getTaskExecutionById(@Param('executionID') executionID: number) {

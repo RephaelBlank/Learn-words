@@ -26,7 +26,7 @@ import { AuthService } from './auth.service';
       
       const resourceType = this.extractResourceType(request);
       const resourceOwnerId = this.extractResourceId(request, resourceType);
-
+      console.log (resourceType); 
       console.log(resourceOwnerId);
 
       if (user && user.role === 'teacher'){
