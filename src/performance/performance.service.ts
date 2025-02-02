@@ -172,6 +172,10 @@ export class PerformanceService {
     async getTaskToExecution (executionID: number){
       const taskExecution = await this.findTaskExecutionById(executionID);
 
+      if (taskExecution.status === 'COMPLETED') {
+        return taskExecution; 
+      }
+
       const words = taskExecution.assignedTask.tasks.words.map(word => ({
         id: word.wordID,
         content: word.wordName,
