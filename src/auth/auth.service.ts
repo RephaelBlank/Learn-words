@@ -64,6 +64,10 @@ export class AuthService {
         return this.validateAssignmentAccess(userId, resourceId);
       case 'teacher': 
         return Number(userId) === Number(resourceId); 
+      case 'execution':
+        return this.validateTeacherAccessToStudentExecution (userId, resourceId); 
+      case 'student': 
+        return this.validateTeacherAccessToStudent (userId, resourceId); 
       default:
         return false;
     }
@@ -78,6 +82,26 @@ export class AuthService {
     const taskData = await this.performanceService.findAssignedTask(taskId); 
     return taskData?.class?.teacherID === userId; 
   }
+
+  private async validateTeacherAccessToStudentExecution (userId: number, executionID: number): Promise<boolean>{
+    const studentID = await this.performanceService.findStudentByTaskExecution (executionID); 
+    if (studentID){
+      const teacherID = await this.classesService.findTeacherByStudent (studentID);
+      if (teacherID) {
+        return teacherID === userId; 
+      }
+    } 
+    return false; 
+  }
+
+  private async validateTeacherAccessToStudent (userId: number, studentID: number):Promise<boolean>{
+    const teacherID = await this.classesService.findTeacherByStudent (studentID);
+    console.log ("teacher"); 
+    console.log (teacherID); 
+    console.log ("user"); 
+    console.log (userId); 
+    return teacherID === userId; 
+  } 
 
   async validateAccessStudent(studentID: number,resourceType: string, resourceId: number): Promise<boolean>{
     switch (resourceType){

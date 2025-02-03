@@ -94,4 +94,11 @@ export class ClasseService {
       return teacher; 
     }
 
+    async findTeacherByStudent (studentID: number){
+      const student = await this.studentsModel.findOne ({where: {studentID}, include: [{
+        model: Classes, attributes: ['teacherID']
+      }]})
+      return student.class.teacherID; 
+    }
+
 }

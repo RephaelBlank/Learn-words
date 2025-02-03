@@ -59,7 +59,8 @@ import { AuthService } from './auth.service';
     }
 
     private extractResourceType (request: any): string{
-        if (request.params?.studentID){
+      console.log (request.query); 
+      if (request.query?.studentID||request.params?.studentID){
           return 'student'; 
         }
         if (request.params?.executionID){
@@ -80,7 +81,7 @@ import { AuthService } from './auth.service';
             case 'teacher': 
                 return request.body?.teacherID || 0;
             case 'student':
-                return request.params?.studentID || 0;
+                return request.query?.studentID || request.params?.studentID || 0;
             case 'execution':
                 return request.params?.executionID || 0; 
             default:

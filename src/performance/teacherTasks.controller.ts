@@ -1,4 +1,4 @@
-import { Body, Controller , Get, Param, Post, UseGuards} from '@nestjs/common';
+import { Body, Controller , Get, Param, Post, Query, UseGuards} from '@nestjs/common';
 import { PerformanceService } from './performance.service';
 import { AssignTaskDto, SendTaskDto } from './assignTask.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -20,5 +20,14 @@ export class TeacherTasksController {
   async assignTaskByID (@Body () sendTaskDto: SendTaskDto){
     return this.performanceService.assignTaskToAllStudents(sendTaskDto); 
   }
+
+  @UseGuards(AuthGuard, RolesGuard)
+  @Get('assignedTask')
+  getTaskExecutionsByStudentAndAssignedTas(
+    @Query('studentID') studentID: number,
+    @Query('assignedID') assignedID: number
+  ) {
+    return this.performanceService.findTasksByStudentAndAssignedTask (studentID, assignedID);  
+  }  
 
 }

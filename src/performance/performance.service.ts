@@ -118,11 +118,7 @@ export class PerformanceService {
           }
         });
         //if there task not completed return execution ID, else return all tasks
-        for (const performance of performances){
-          if (performance.status === 'PENDING'){
-            return performance; 
-          }
-        }
+        
         return performances; 
       } catch (error) {
         console.error("Error fetching task performances:", error);
