@@ -218,9 +218,7 @@ export class PerformanceService {
         };
     }
 
-    async verifyWordDefinitionPairs(executionID, pairs: { wordID: number; definitionID: number }[]) {
-
-        const wordIDs = pairs.map(pair => pair.wordID);
+    async verifyWordDefinitionPairs(executionID, pairs: { wordID: number; word: string, definitionID: number, definition: string }[]) {
 
         const taskExecution = await this.findTaskExecutionById(executionID);
         const words = taskExecution.assignedTask.tasks.words;
@@ -238,8 +236,9 @@ export class PerformanceService {
               correctAnswers++;
             }
             return {
-                ...pair,
-                isValid,
+              word: pair.word, 
+              definition: pair.definition,
+              isValid,
               };
             });
 
