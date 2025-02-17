@@ -30,7 +30,7 @@ export class PerformanceService {
         return definition || 'No definition available';; 
       } catch (error) {
           console.error(`Failed to fetch definition for word "${word}":`, error.message);
-          throw new Error(); 
+          throw new InternalServerErrorException("Failed to fetch definition for word"); 
           return 'Definition not found'; 
       }
   }

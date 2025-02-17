@@ -21,6 +21,7 @@ export class AuthService {
     const payload = {role:'teacher', sub: user.teacherID, username: user.teacherName };
     return {
       access_token: await this.jwtService.signAsync(payload),
+      name: user.teacherName
     };
   }
 
@@ -30,7 +31,8 @@ export class AuthService {
       const payload = {role:'teacher', sub: teacher.teacherID, username: teacher.teacherName };
     return {
       access_token: await this.jwtService.signAsync(payload),
-      teacherID: teacher.teacherID
+      teacherID: teacher.teacherID,
+      name: teacher.teacherName
     };
     }
   }
@@ -43,6 +45,7 @@ export class AuthService {
     const payload = {role:'student', sub: user.studentID, username: user.studentName };
     return {
       access_token: await this.jwtService.signAsync(payload),
+      name: user.studentName
     };
   }
 
