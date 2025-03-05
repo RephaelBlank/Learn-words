@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ClasseService } from 'src/classes/classes.service';
 import { JwtService } from '@nestjs/jwt';
 import { PerformanceService } from 'src/performance/performance.service';
 import { jwtConstants } from './constants';
+import * as bcrypt from 'bcrypt'; 
 
 
 @Injectable()
@@ -13,11 +14,17 @@ export class AuthService {
         private jwtService: JwtService
     ) {}
 
-  async signIn(teacherID: number, pass: string): Promise<any> {
-    const user = await this.classesService.findTeacherById(teacherID);
-    if (user?.password !== pass) {
-      throw new UnauthorizedException("Password incorrect");
+  async signIn(email: string, pass: string): Promise<any> {
+    const user = await this.classesService.findTeacherByEmail(email);
+    if (!user){
+      throw new UnauthorizedException ("User not found"); 
     }
+
+    const isMatch = await bcrypt.compare(pass, user.password);
+    if (!isMatch) {
+      throw new UnauthorizedException("Password incorrect");
+    } 
+
     const payload = {role:'teacher', sub: user.teacherID, username: user.teacherName };
     return {
       access_token: await this.jwtService.signAsync(payload),
@@ -25,8 +32,16 @@ export class AuthService {
     };
   }
 
-  async signUp (teacherName: string, pass: string): Promise<any> {
-    const teacher = await this.classesService.newTeacher(teacherName,pass); 
+  async signUp (teacherName: string, email: string, pass: string): Promise<any> {
+    const existUser = await this.classesService.findTeacherByEmail(email); 
+    if (existUser){
+      throw new ConflictException ("Email already in use");
+    }
+
+    const saltOrRounds = 10;
+    const hashPassword = await bcrypt.hash(pass, saltOrRounds)
+
+    const teacher = await this.classesService.newTeacher(teacherName, email, hashPassword); 
     if (teacher){
       const payload = {role:'teacher', sub: teacher.teacherID, username: teacher.teacherName };
     return {

@@ -53,6 +53,13 @@ export class ClasseService {
       return teacher;
     }
 
+    async findTeacherByEmail (teacherEmail: string){
+      const teacher = await this.teachersModel.findOne ({
+        where: {email: teacherEmail}
+      });
+      return teacher;
+    }
+
     async findStudentById (studentID: number){
       const student = await this.studentsModel.findOne ({
         where: {studentID}
@@ -89,8 +96,8 @@ export class ClasseService {
       await targetClass.$add('students', students); 
     }
 
-    async newTeacher (teacherName: string, password: string) {
-      const teacher = await this.teachersModel.create({teacherName,password}); 
+    async newTeacher (teacherName: string, email: string, password: string) {
+      const teacher = await this.teachersModel.create({teacherName, email, password}); 
       return teacher; 
     }
 
