@@ -99,27 +99,47 @@ export class PerformanceService {
         if (!tasksExecutions) {
             throw new NotFoundException(`No task found for student ID ${studentID}`);
         }
-
+        
         return tasksExecutions.map(taskExecution => ({
           executionID: taskExecution.executionID,
+          assignedID: taskExecution.assignedID, 
+          taskID: taskExecution.assignedTask.taskID,
           taskName: taskExecution.assignedTask.tasks.taskName,
           results: taskExecution.results,
           score: taskExecution.score,
           status: taskExecution.status,
+          sendTime: taskExecution.createdAt, 
+          submissionTime: taskExecution.updatedAt
       }));
     }
 
     async findTasksByStudentAndAssignedTask(studentId, taskId) {
       try {
-        const performances = await this.tasksExecutionsModel.findAll({
+        const tasksExecutions = await this.tasksExecutionsModel.findAll({
           where: {
             studentID: studentId,
             assignedID: taskId
-          }
+          },
+          include: [
+            {
+              model: AssignedTasks,
+              include: [Tasks],
+            },
+          ],
         });
         //if there task not completed return execution ID, else return all tasks
-        
-        return performances; 
+        return tasksExecutions.map(taskExecution => ({
+          executionID: taskExecution.executionID,
+          assignedID: taskExecution.assignedID, 
+          taskID: taskExecution.assignedTask.taskID,
+          taskName: taskExecution.assignedTask.tasks.taskName,
+          results: taskExecution.results,
+          score: taskExecution.score,
+          status: taskExecution.status,
+          sendTime: taskExecution.createdAt, 
+          submissionTime: taskExecution.updatedAt
+      }));
+
       } catch (error) {
         console.error("Error fetching task performances:", error);
         throw error;
